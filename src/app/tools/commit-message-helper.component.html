@@ -1,0 +1,67 @@
+<div class=" mx-auto p-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <div class="mb-4 flex space-x-4">
+    <button (click)="switchMode('manual')" 
+            class="px-4 py-2 rounded font-semibold"
+            [ngClass]="activeMode === 'manual' ? 'bg-blue-600 text-white' : 'bg-gray-200'">
+      Manual
+    </button>
+    
+  </div>
+
+  <!-- Manual Mode -->
+  <form *ngIf="activeMode === 'manual'" [formGroup]="commitForm" (ngSubmit)="generateCommitMessage()" class="space-y-4">
+    <div>
+      <label class="block text-sm  font-medium mb-1">Type</label>
+      <select formControlName="type" class="w-full rounded border px-3 py-2">
+        <option *ngFor="let type of types" class="text-gray-900" [value]="type">{{ type }}</option>
+      </select>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Scope (optional)</label>
+      <input type="text" formControlName="scope" class="w-full rounded border px-3 py-2">
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Description</label>
+      <input type="text" formControlName="description" class="w-full rounded border px-3 py-2">
+      <small *ngIf="commitForm.controls?.['description']?.errors?.['maxlength']" class="text-red-500">
+        Description must be 72 characters or less.
+      </small>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Body (optional)</label>
+      <textarea formControlName="body" class="w-full rounded border px-3 py-2"></textarea>
+    </div>
+
+    <div>
+      <label class="block text-sm font-medium mb-1">Footer (optional)</label>
+      <textarea formControlName="footer" class="w-full rounded border px-3 py-2"></textarea>
+    </div>
+
+    <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Generate</button>
+
+    <div *ngIf="messagePreview" class="mt-4 ">
+      <label class="block font-medium mb-1">Generated Commit Message</label>
+      <pre class="dark:bg-gray-900 w-full rounded border px-3 py-2">{{ messagePreview }}</pre>
+      <button (click)="copyToClipboard(messagePreview)" class="mt-2 text-blue-600">Copy</button>
+    </div>
+  </form>
+
+  <!-- AI Mode -->
+  <!-- <div *ngIf="false" class="space-y-4">
+    <label class="block text-sm font-medium mb-1">Enter Git diff or summary</label>
+    <textarea [(ngModel)]="aiInput" class="w-full rounded border px-3 py-2" rows="6"></textarea>
+    
+    <button (click)="generateCommitWithAI()" class="bg-green-600 text-white px-4 py-2 rounded" [disabled]="loading">
+      {{ loading ? 'Generating...' : 'Generate with AI' }}
+    </button>
+
+    <div *ngIf="aiOutput" class="mt-4">
+      <label class="block font-medium mb-1">AI Commit Message</label>
+      <pre class="bg-gray-100 p-3 rounded">{{ aiOutput }}</pre>
+      <button (click)="copyToClipboard(aiOutput)" class="mt-2 text-green-600">Copy</button>
+    </div>
+  </div> -->
+</div>

@@ -1,0 +1,62 @@
+<div class="p-6 dark:bg-gray-900 min-h-screen text-white  mx-auto">
+  <h2 class="text-2xl font-bold mb-6">🎲 Random JSON Generator</h2>
+
+  <div class="space-y-4">
+    <div *ngFor="let field of fields; let i = index" class="flex items-center gap-4">
+      <input
+        type="text"
+        class="bg-gray-800 border border-gray-700 p-2 rounded flex-1"
+        placeholder="Field name"
+        [(ngModel)]="field.name"
+      />
+      <select
+        [(ngModel)]="field.type"
+        class="bg-gray-800 border border-gray-700 p-2 rounded"
+      >
+        <option value="string">String</option>
+        <option value="number">Number</option>
+        <option value="boolean">Boolean</option>
+        <option value="date">Date</option>
+      </select>
+      <button
+        class="text-red-500 hover:text-red-700"
+        (click)="removeField(i)"
+      >
+        ✖
+      </button>
+    </div>
+
+    <div class="flex gap-4 items-center">
+      <button
+        class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+        (click)="addField()"
+      >
+        ➕ Add Field
+      </button>
+
+      <input
+        type="number"
+        [(ngModel)]="quantity"
+        min="1"
+        class="bg-gray-800 border border-gray-700 p-2 rounded w-24"
+        placeholder="Qty"
+      />
+    </div>
+
+    <button
+      class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+      (click)="generateJSON()"
+    >
+      🔄 Generate JSON
+    </button>
+
+    <div class="mt-4">
+      <h3 class="font-semibold text-lg">Generated JSON</h3>
+      <div class="flex gap-4 mt-2">
+        <button class="bg-gray-700 px-4 py-2 rounded" (click)="copyToClipboard()">📋 Copy</button>
+        <button class="bg-gray-700 px-4 py-2 rounded" (click)="downloadJSON()">⬇ Export</button>
+      </div>
+      <pre class="bg-gray-800 text-green-400 p-4 rounded mt-2 overflow-x-auto max-h-[500px]">{{ generatedJSON }}</pre>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="p-4 space-y-4 dark:bg-gray-900 min-h-screen text-white  mx-auto">
+
+  <h2 class="text-lg font-semibold">🔍 Regex Explainer & Tester</h2>
+
+  <div>
+    <label class="block mb-1 text-sm">Select a common regex:</label>
+    <select [(ngModel)]="selectedPattern" (change)="onPatternSelect()" class="w-full p-2 rounded bg-zinc-800 border border-zinc-600">
+      <option value="">-- Choose a pattern --</option>
+      <option *ngFor="let item of commonPatterns" [value]="item.pattern">{{ item.label }}</option>
+    </select>
+  </div>
+
+  <div>
+    <label class="block mb-1 text-sm">Regex Pattern:</label>
+    <input [(ngModel)]="regexPattern" (input)="validateRegex(); getExplanation()" placeholder="Enter regex pattern"
+           class="w-full p-2 rounded bg-zinc-800 border border-zinc-600" />
+  </div>
+
+  <div>
+    <label class="block mb-1 text-sm">Test String:</label>
+    <input [(ngModel)]="testString" (input)="validateRegex()" placeholder="Enter test string"
+           class="w-full p-2 rounded bg-zinc-800 border border-zinc-600" />
+  </div>
+
+  <div class="flex items-center space-x-2">
+    <span [ngClass]="isValid ? 'text-green-500' : 'text-red-500'">
+      {{ isValid ? '✅ Match Found' : '❌ No Match' }}
+    </span>
+    <button (click)="copyToClipboard(testString)" class="text-blue-400 text-sm hover:underline">Copy Test String</button>
+  </div>
+
+  <div *ngIf="matches.length" class="text-sm">
+    <strong>Matched:</strong> {{ matches.join(', ') }}
+  </div>
+
+  <div class="bg-zinc-900 p-3 rounded text-sm" *ngIf="highlightedText">
+    <div [innerHTML]="highlightedText"></div>
+  </div>
+
+  <div *ngIf="explanation" class="bg-zinc-900 p-4 rounded text-sm whitespace-pre-wrap mt-3">
+    <h3 class="text-md font-medium mb-2">🔍 Explanation:</h3>
+    {{ explanation }}
+    <div class="mt-2">
+      <button (click)="copyToClipboard(explanation)" class="text-blue-400 text-sm hover:underline">Copy Explanation</button>
+    </div>
+  </div>
+
+</div>

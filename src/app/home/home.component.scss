@@ -1,0 +1,4 @@
+a[routerLink] {
+  @apply rounded-xl bg-white/80 dark:bg-white/5 backdrop-blur-md shadow p-5 flex flex-col transition-all duration-300;
+  @apply hover:shadow-xl hover:-translate-y-1;
+}

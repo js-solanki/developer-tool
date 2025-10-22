@@ -1,0 +1,44 @@
+<div class="min-h-screen p-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <h2 class="text-3xl font-bold mb-6 text-center">🔁 JSON ⇄ ENV Converter</h2>
+
+  <div class="flex flex-wrap justify-center gap-4 mb-4">
+    <button
+      class="px-4 py-2 rounded bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+      [class.opacity-50]="mode === 'json-to-env'"
+      (click)="mode = 'json-to-env'"
+    >
+      JSON → ENV
+    </button>
+    <button
+      class="px-4 py-2 rounded bg-green-600 text-white font-semibold hover:bg-green-700 transition"
+      [class.opacity-50]="mode === 'env-to-json'"
+      (click)="mode = 'env-to-json'"
+    >
+      ENV → JSON
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+    <textarea
+      [(ngModel)]="input"
+      placeholder="Enter {{ mode === 'json-to-env' ? 'JSON' : 'ENV' }} here"
+      class="p-4 h-64 w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 text-sm font-mono"
+    ></textarea>
+
+    <textarea
+      [value]="output"
+      readonly
+      placeholder="Converted output"
+      class="p-4 h-64 w-full rounded-md border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-sm font-mono"
+    ></textarea>
+  </div>
+
+  <div class="text-center mt-6">
+    <button
+      class="px-6 py-2 bg-indigo-600 text-white font-semibold rounded hover:bg-indigo-700 transition"
+      (click)="convert()"
+    >
+      Convert
+    </button>
+  </div>
+</div>

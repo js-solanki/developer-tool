@@ -1,0 +1,93 @@
+
+<div class="p-6  mx-auto bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+  <h2 class="text-2xl font-semibold mb-4">🔍 NPM Package Health Checker</h2>
+
+  <input
+    type="text"
+    [formControl]="query"
+    placeholder="Search for NPM package..."
+    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+  />
+
+  <!-- Suggestions dropdown -->
+  <ul
+    *ngIf="suggestions.length > 0 && query.value"
+    class="border border-gray-200 mt-2 rounded-lg shadow-sm bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100  max-h-64 overflow-auto"
+  >
+    <li
+      *ngFor="let suggestion of suggestions"
+      (click)="selectPackage(suggestion.package)"
+      class="px-4 py-2 cursor-pointer hover:bg-blue-100"
+    >
+      <span class="font-medium">{{ suggestion.package.name }}</span>
+      <span class="text-sm text-gray-500 ml-2">{{ suggestion.package.version }}</span>
+    </li>
+  </ul>
+
+  <!-- Selected package details -->
+  <div *ngIf="selectedPackage" class="mt-6 p-4 border border-gray-300 rounded-lg bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <h3 class="text-lg font-semibold mb-2">
+      📦 {{ selectedPackage.name }} <span class="text-sm text-gray-500">v{{ selectedPackage.version }}</span>
+    </h3>
+    <p class="text-sm mb-2">{{ selectedPackage.description || 'No description available.' }}</p>
+    <div class="text-sm text-gray-600 space-y-1">
+      <p><strong>Author:</strong> {{ selectedPackage.author?.name || 'Unknown' }}</p>
+      <p><strong>License:</strong> {{ selectedPackage.license || 'N/A' }}</p>
+      <p>
+        <strong>Link:</strong>
+        <a
+          [href]="selectedPackage.links?.npm"
+          target="_blank"
+          class="text-blue-600 hover:underline"
+        >
+          {{ selectedPackage.links?.npm }}
+        </a>
+      </p>
+    </div>
+  </div>
+</div>
+<div class="p-6 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100  shadow-md  mx-auto">
+  <h2 class="text-2xl font-semibold text-gray-800 mb-4 flex items-center gap-2">
+    📦 NPM Package Health Checker
+  </h2>
+
+  <div class="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
+    <input
+      type="text"
+      class="w-full sm:w-2/3 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+      placeholder="Enter NPM package name (e.g., lodash)"
+      [(ngModel)]="packageName"
+      (keyup.enter)="getPackageInfo()"
+    />
+    <button
+      class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition"
+      (click)="getPackageInfo()"
+    >
+      Check
+    </button>
+  </div>
+
+  <div *ngIf="packageInfo" class="mt-6 border border-gray-200 rounded-lg bg-gray-50 p-5">
+    <div class="flex justify-between items-center mb-2">
+      <h3 class="text-xl font-semibold text-gray-700">
+        {{ packageInfo.name }} <span class="text-sm text-gray-500">v{{ packageInfo.version }}</span>
+      </h3>
+      <a
+        [href]="packageInfo.npmLink"
+        target="_blank"
+        class="text-blue-600 text-sm hover:underline"
+      >
+        View on npm
+      </a>
+    </div>
+
+    <p class="text-gray-600 mb-4">{{ packageInfo.description }}</p>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-700">
+      <div><span class="font-medium">📅 Last Updated:</span> {{ packageInfo.lastUpdate | date }}</div>
+      <div><span class="font-medium">📦 Dependencies:</span> {{ packageInfo.dependencies }}</div>
+      <div><span class="font-medium">⬇️ Weekly Downloads:</span> {{ packageInfo.downloads | number }}</div>
+      <div><span class="font-medium">👨‍💻 Maintainers:</span> {{ packageInfo.maintainers.join(', ') }}</div>
+    </div>
+  </div>
+</div>

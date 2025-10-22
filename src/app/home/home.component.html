@@ -1,0 +1,21 @@
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 p-6 transition-colors duration-300">
+  <h1 class="text-4xl font-extrabold text-center mb-8 text-gray-800 dark:text-gray-100">
+    🧰 Dev Toolkit
+  </h1>
+
+  <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+    <a
+      *ngFor="let tool of tools"
+      [routerLink]="tool.route"
+      class="rounded-xl bg-white/80 dark:bg-white/5 backdrop-blur-md shadow hover:shadow-xl hover:-translate-y-1 transition-all duration-300 p-5 flex flex-col"
+    >
+      <div class="flex items-center gap-3 mb-2">
+        <span class="text-4xl">{{ tool.icon }}</span>
+        <h2 class="text-lg font-semibold text-gray-800 dark:text-white">{{ tool.name }}</h2>
+      </div>
+      <p class="text-sm text-gray-600 dark:text-gray-300 leading-snug">
+        {{ tool.description }}
+      </p>
+    </a>
+  </div>
+</div>
