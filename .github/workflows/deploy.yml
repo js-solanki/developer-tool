@@ -1,0 +1,61 @@
+name: Deploy Angular to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # required for tagging
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular app
+        run: npm run build -- --configuration production --base-href "/${{ github.event.repository.name }}/"
+
+      # -------------------------------
+      # AUTO VERSION TAGGING
+      # -------------------------------
+      - name: Create version tag
+        id: tag_version
+        run: |
+          git fetch --tags
+          latestTag=$(git tag | sort -V | tail -n 1)
+
+          if [ -z "$latestTag" ]; then
+            newTag="v1.0.0"
+          else
+            version=${latestTag#v}
+            IFS='.' read -r major minor patch <<< "$version"
+            patch=$((patch+1))
+            newTag="v$major.$minor.$patch"
+          fi
+
+          echo "New tag: $newTag"
+          git tag $newTag
+          git push origin $newTag
+
+      # -------------------------------
+      # DEPLOY TO GITHUB PAGES
+      # -------------------------------
+      - name: Deploy to GitHub Pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          folder: dist   # Angular dist folder
+          branch: gh-pages
